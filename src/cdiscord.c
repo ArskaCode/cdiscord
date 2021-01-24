@@ -115,7 +115,7 @@ void dc_client_destroy_internal(discord_client *client)
         lws_sul_cancel(&client->heartbeat_sul);
         lws_sul_cancel(&client->connect_sul);
         lws_sul_cancel(&client->identify_sul);
-        lws_close_free_wsi(client->wsi, LWS_CLOSE_STATUS_NORMAL, "asd");
+        lws_close_free_wsi(client->wsi, LWS_CLOSE_STATUS_NORMAL, "dc_client_destroy_internal");
     }
 
     json_object_put(client->ready_object);

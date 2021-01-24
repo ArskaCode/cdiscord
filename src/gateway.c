@@ -148,6 +148,8 @@ int dc_gateway_callback(struct lws *wsi, enum lws_callback_reasons reason, void 
                 }
 
                 case 7: // reconnect
+                    lwsl_user("%s#%s: Received reconnect opcode.\n", client->user.username, client->user.discriminator);
+                    lws_close_free_wsi(client->wsi, LWS_CLOSE_STATUS_NORMAL, "dc_gateway_callback");
                     break;
 
                 case 9: // invalid session
@@ -176,7 +178,10 @@ int dc_gateway_callback(struct lws *wsi, enum lws_callback_reasons reason, void 
             lws_sul_cancel(&client->heartbeat_sul);
             client->connected = false;
 
-            lws_sul_schedule(context.lws_ctx, 0, &client->connect_sul, dc_gateway_connect, 5000 * LWS_US_PER_MS);
+            if (client->reconnect_tries < 5) {
+                lws_sul_schedule(context.lws_ctx, 0, &client->connect_sul, dc_gateway_connect, 5000 * LWS_US_PER_MS);
+                client->reconnect_tries++;
+            }
             break;
 
         case LWS_CALLBACK_WS_PEER_INITIATED_CLOSE:
@@ -231,9 +236,12 @@ static void handle_dispatch(discord_client *client, const char *type, json_objec
 
         if (client->event_handler)
             client->event_handler(client, dc_event_logged_in);
+
+        client->reconnect_tries = 0;
     }
     else if (!strcmp(type, "RESUMED")) {
         lwsl_user("%s#%s: Connection resumed successfully!\n", client->user.username, client->user.discriminator);
+        client->reconnect_tries = 0;
     }
 }
 

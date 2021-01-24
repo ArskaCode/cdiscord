@@ -18,6 +18,7 @@ struct discord_client {
     lws_sorted_usec_list_t connect_sul;
     lws_sorted_usec_list_t identify_sul;
     bool connected;
+    int reconnect_tries;
 
     char *token;
     dc_user user;
