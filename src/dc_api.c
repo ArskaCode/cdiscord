@@ -35,14 +35,15 @@ void dc_api_redeem_gift_code(discord_client *client, const char *gift_code)
 
     char authorization_str[256];
     strcpy(authorization_str, "Authorization: ");
-    strcat(authorization_str, gift_code);
+    strcat(authorization_str, client->token);
 
     struct curl_slist *chunk = NULL;
     chunk = curl_slist_append(chunk, authorization_str);
+    chunk = curl_slist_append(chunk, "content-type: application/json");
 
     curl_easy_setopt(context.curl, CURLOPT_WRITEFUNCTION, write_data);
     curl_easy_setopt(context.curl, CURLOPT_POST, 1);
-    curl_easy_setopt(context.curl, CURLOPT_POSTFIELDS, "");
+    curl_easy_setopt(context.curl, CURLOPT_POSTFIELDS, "{\"channel_id\":null}");
     curl_easy_setopt(context.curl, CURLOPT_HTTPHEADER, chunk);
     curl_easy_setopt(context.curl, CURLOPT_URL, redeem_url);
 
