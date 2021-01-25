@@ -22,7 +22,11 @@ static struct lws_protocols protocols[] = {
                 dc_gateway_callback,
                 0,
                 512
-        }, {0}
+        },
+        {
+
+        },
+        {0}
 };
 
 static struct lws_extension extensions[] = {
@@ -144,5 +148,5 @@ const dc_message *dc_client_get_latest_message(discord_client *client)
 
 void dc_client_redeem_gift(discord_client *client, const char *gift_code)
 {
-    dc_api_redeem_gift_code(client, gift_code);
+    dc_api_redeem_gift(client, gift_code);
 }
