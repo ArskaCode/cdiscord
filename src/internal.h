@@ -12,7 +12,7 @@
 #include <libwebsockets.h>
 #include <json.h>
 
-struct discord_client {
+struct discord_client_s {
     struct lws *wsi;
     lws_sorted_usec_list_t heartbeat_sul;
     lws_sorted_usec_list_t connect_sul;

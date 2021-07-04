@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef struct discord_client discord_client;
+typedef struct discord_client_s discord_client;
 
 
 /*
@@ -45,13 +45,13 @@ typedef void (*dc_event_handler_fun)(discord_client *client, enum dc_event event
  * Discord data structures
  */
 
-typedef struct dc_user {
+typedef struct dc_user_s {
     u_int64_t id;
     const char *username;
     const char *discriminator;
 } dc_user;
 
-typedef struct dc_message {
+typedef struct dc_message_s {
     const char *contents;
 } dc_message;
 
