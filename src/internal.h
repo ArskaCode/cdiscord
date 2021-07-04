@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <curl/curl.h>
 #include <libwebsockets.h>
-#include <json-c/json.h>
+#include <json.h>
 
 struct discord_client {
     struct lws *wsi;

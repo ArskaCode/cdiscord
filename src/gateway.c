@@ -4,7 +4,7 @@
 
 #include "gateway.h"
 
-#include <json-c/json.h>
+#include <json.h>
 #include <bsd/stdlib.h>
 
 #include "internal.h"

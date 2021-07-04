@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <libwebsockets.h>
-#include <json-c/json.h>
+#include <json.h>
 
 #include "internal.h"
 #include "gateway.h"
