@@ -77,11 +77,12 @@ void dc_log(int level, char *format, ...)
     va_end(args);
 }
 
-discord_client* dc_client_create(const char *token, bool selfbot)
+discord_client* dc_client_create(const char *token, bool selfbot, void *user)
 {
     discord_client* client = calloc(1, sizeof(discord_client));
     client->token = malloc(strlen(token)+1);
     client->selfbot = selfbot;
+    client->user_data = user;
     strcpy(client->token, token);
     client->next = context.head;
     context.head = client;
@@ -131,12 +132,16 @@ void dc_client_set_event_handler(discord_client *client, dc_event_handler_fun ev
     client->event_handler = event_handler;
 }
 
+void *dc_client_get_user_data(discord_client *client) {
+    return client->user_data;
+}
+
 const dc_user *dc_client_get_user(discord_client *client)
 {
     return &client->user;
 }
 
-void dc_client_redeem_gift(discord_client *client, const char *gift_code)
+bool dc_client_redeem_gift(discord_client *client, const char *gift_code)
 {
-    dc_api_redeem_gift_code(client, gift_code);
+    return dc_api_redeem_gift_code(client, gift_code);
 }

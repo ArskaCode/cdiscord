@@ -17,6 +17,6 @@ void dc_api_client_init(discord_client *client);
 void dc_api_client_terminate(discord_client *client);
 */
 
-void dc_api_redeem_gift_code(discord_client *client, const char *gift_code);
+bool dc_api_redeem_gift_code(discord_client *client, const char *gift_code);
 
 #endif //CDISCORD_DC_API_H

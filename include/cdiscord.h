@@ -61,7 +61,7 @@ typedef struct dc_message_s {
  * Discord client functions
  */
 
-discord_client* dc_client_create(const char *token, bool selfbot);
+discord_client* dc_client_create(const char *token, bool selfbot, void *user);
 
 void dc_client_connect(discord_client *client);
 
@@ -71,7 +71,9 @@ void dc_client_set_event_handler(discord_client *client, dc_event_handler_fun ev
 
 const dc_user* dc_client_get_user(discord_client *client);
 
-void dc_client_redeem_gift(discord_client *client, const char *gift_code);
+void *dc_client_get_user_data(discord_client *client);
+
+bool dc_client_redeem_gift(discord_client *client, const char *gift_code);
 
 
 #endif //CDISCORD_CDISCORD_H

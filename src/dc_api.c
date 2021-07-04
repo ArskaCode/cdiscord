@@ -26,7 +26,7 @@ size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
     return size * nmemb;
 }
 
-void dc_api_redeem_gift_code(discord_client *client, const char *gift_code)
+bool dc_api_redeem_gift_code(discord_client *client, const char *gift_code)
 {
     char redeem_url[256];
     strcpy(redeem_url, "https://discord.com/api/v8/entitlements/gift-codes/");
@@ -56,8 +56,10 @@ void dc_api_redeem_gift_code(discord_client *client, const char *gift_code)
 
     if (result == 200) {
         dc_log(DC_LOG_USER, "%s#%s: Gift code %s claimed!\n", client->user.username, client->user.discriminator, gift_code);
+        return true;
     }
     else {
         dc_log(DC_LOG_WARN, "%s#%s: Couldn't claim gift code %s: %d!\n", client->user.username, client->user.discriminator, gift_code, result);
+        return false;
     }
 }

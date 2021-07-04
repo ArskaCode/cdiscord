@@ -36,6 +36,8 @@ struct discord_client_s {
 
     struct json_object *ready_object;
 
+    void *user_data;
+
     discord_client *next;
 };
 
