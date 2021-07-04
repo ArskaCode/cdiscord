@@ -6,6 +6,7 @@
 #define CDISCORD_CDISCORD_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct discord_client discord_client;
 
@@ -59,7 +60,7 @@ typedef struct dc_message {
  * Discord client functions
  */
 
-discord_client* dc_client_create(const char *token);
+discord_client* dc_client_create(const char *token, bool selfbot);
 
 void dc_client_connect(discord_client *client);
 

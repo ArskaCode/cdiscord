@@ -21,6 +21,7 @@ struct discord_client {
     int reconnect_tries;
 
     char *token;
+    bool selfbot;
     dc_user user;
     dc_message latest_message;
     dc_event_handler_fun event_handler;

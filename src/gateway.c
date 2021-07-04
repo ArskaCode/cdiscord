@@ -295,7 +295,8 @@ static void send_identify(discord_client *client)
     json_object *d = json_object_new_object();
 
     json_object_object_add(d, "token", json_object_new_string(client->token));
-    json_object_object_add(d, "intents", json_object_new_int(supported_intents));
+    if (!client->selfbot)
+        json_object_object_add(d, "intents", json_object_new_int(supported_intents));
     json_object_object_add(d, "properties", properties);
     json_object_object_add(root, "op", json_object_new_int(2));
     json_object_object_add(root, "d", d);

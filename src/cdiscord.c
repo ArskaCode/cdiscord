@@ -77,10 +77,11 @@ void dc_log(int level, char *format, ...)
     va_end(args);
 }
 
-discord_client* dc_client_create(const char *token)
+discord_client* dc_client_create(const char *token, bool selfbot)
 {
     discord_client* client = calloc(1, sizeof(discord_client));
     client->token = malloc(strlen(token)+1);
+    client->selfbot = selfbot;
     strcpy(client->token, token);
     client->next = context.head;
     context.head = client;
