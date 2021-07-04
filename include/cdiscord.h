@@ -38,7 +38,7 @@ enum dc_event {
     dc_event_message,
 };
 
-typedef void (*dc_event_handler_fun)(discord_client *client, enum dc_event event);
+typedef void (*dc_event_handler_fun)(discord_client *client, void *data, enum dc_event event);
 
 
 /*
@@ -69,8 +69,6 @@ void dc_client_destroy(discord_client *client);
 void dc_client_set_event_handler(discord_client *client, dc_event_handler_fun event_handler);
 
 const dc_user* dc_client_get_user(discord_client *client);
-
-const dc_message* dc_client_get_latest_message(discord_client *client);
 
 void dc_client_redeem_gift(discord_client *client, const char *gift_code);
 

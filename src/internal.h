@@ -23,7 +23,6 @@ struct discord_client_s {
     char *token;
     bool selfbot;
     dc_user user;
-    dc_message latest_message;
     dc_event_handler_fun event_handler;
 
     char *message_buffer;
@@ -36,8 +35,6 @@ struct discord_client_s {
     int32_t disconnect_code;
 
     struct json_object *ready_object;
-    struct json_object *message_create_object;
-    struct json_object *message_update_object;
 
     discord_client *next;
 };

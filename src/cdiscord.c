@@ -120,8 +120,6 @@ void dc_client_destroy_internal(discord_client *client)
     }
 
     json_object_put(client->ready_object);
-    json_object_put(client->message_create_object);
-    json_object_put(client->message_update_object);
 
     free(client->message_buffer);
     free(client->token);
@@ -136,11 +134,6 @@ void dc_client_set_event_handler(discord_client *client, dc_event_handler_fun ev
 const dc_user *dc_client_get_user(discord_client *client)
 {
     return &client->user;
-}
-
-const dc_message *dc_client_get_latest_message(discord_client *client)
-{
-    return &client->latest_message;
 }
 
 void dc_client_redeem_gift(discord_client *client, const char *gift_code)

@@ -207,20 +207,18 @@ static void heartbeat_callback(lws_sorted_usec_list_t *heartbeat_sul)
 static void handle_dispatch(discord_client *client, const char *type, json_object *data)
 {
     if (!strcmp(type, "MESSAGE_CREATE")) {
-        json_object_put(client->message_create_object);
-        client->message_create_object = NULL;
-        json_object_deep_copy(data, (json_object**)&client->message_create_object, NULL);
-        client->latest_message.contents = json_object_get_string(json_object_object_get(client->message_create_object, "content"));
+        dc_message message = {
+                .contents = json_object_get_string(json_object_object_get(data, "content")),
+        };
         if (client->event_handler)
-            client->event_handler(client, dc_event_message);
+            client->event_handler(client, &message, dc_event_message);
     }
     else if (!strcmp(type, "MESSAGE_UPDATE")) {
-        json_object_put(client->message_update_object);
-        client->message_update_object = NULL;
-        json_object_deep_copy(data, (json_object**)&client->message_update_object, NULL);
-        client->latest_message.contents = json_object_get_string(json_object_object_get(client->message_update_object, "content"));
+        dc_message message = {
+                .contents = json_object_get_string(json_object_object_get(data, "content")),
+        };
         if (client->event_handler)
-            client->event_handler(client, dc_event_message);
+            client->event_handler(client, &message, dc_event_message);
     }
     else if (!strcmp(type, "READY")) {
         json_object_put(client->ready_object);
@@ -235,7 +233,7 @@ static void handle_dispatch(discord_client *client, const char *type, json_objec
         client->user.discriminator = json_object_get_string(json_object_object_get(user, "discriminator"));
 
         if (client->event_handler)
-            client->event_handler(client, dc_event_logged_in);
+            client->event_handler(client, NULL, dc_event_logged_in);
 
         client->reconnect_tries = 0;
     }
@@ -248,7 +246,7 @@ static void handle_dispatch(discord_client *client, const char *type, json_objec
 static void handle_hello(discord_client *client, json_object *data)
 {
     if (client->event_handler)
-        client->event_handler(client, dc_event_connected);
+        client->event_handler(client, NULL, dc_event_connected);
 
     int interval = json_object_get_int(json_object_object_get(data, "heartbeat_interval"));
     client->heartbeat_interval = interval;
