@@ -83,6 +83,7 @@ discord_client* dc_client_create(const char *token, bool selfbot, void *user)
     client->token = malloc(strlen(token)+1);
     client->selfbot = selfbot;
     client->user_data = user;
+    client->heartbeat_acked = true;
     strcpy(client->token, token);
     client->next = context.head;
     context.head = client;

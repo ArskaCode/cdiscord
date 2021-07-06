@@ -31,6 +31,7 @@ struct discord_client_s {
 
     int last_seq_num;
     int heartbeat_interval;
+    bool heartbeat_acked;
     const char *session_id;
     int32_t disconnect_code;
 

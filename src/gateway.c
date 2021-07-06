@@ -116,25 +116,6 @@ int dc_gateway_callback(struct lws *wsi, enum lws_callback_reasons reason, void 
             if (!last_frag)
                 break;
 
-             /*
-            if (client->message_len < 4 || ntohl(((uint32_t*)client->message_buffer)[0]) != 0x0000FFFF)
-                break;
-
-            z_stream stream;
-            stream.zalloc = Z_NULL;
-            stream.zfree = Z_NULL;
-            stream.opaque = Z_NULL;
-
-            stream.avail_in = 0;
-            stream.next_in = Z_NULL;
-
-            int result = inflateInit(&stream);
-            if (result != Z_OK) {
-                lwsl_err("Could not initialize zlib decompress.\n");
-                break;
-            }
-             */
-
             json_object* obj = json_tokener_parse_ex(context.tokener, client->message_buffer, client->message_len);
             int opcode = json_object_get_int(json_object_object_get(obj, "op"));
             json_object *data = json_object_object_get(obj, "d");
@@ -161,6 +142,7 @@ int dc_gateway_callback(struct lws *wsi, enum lws_callback_reasons reason, void 
                     break;
 
                 case 11: // heartbeat ack
+                    client->heartbeat_acked = true;
                     break;
 
                 default:
@@ -177,6 +159,7 @@ int dc_gateway_callback(struct lws *wsi, enum lws_callback_reasons reason, void 
             lwsl_warn("%s#%s: Connection closed with code %d!\n", client->user.username, client->user.discriminator, client->disconnect_code);
             lws_sul_cancel(&client->heartbeat_sul);
             client->connected = false;
+            client->heartbeat_acked = true;
 
             if (client->reconnect_tries < 5) {
                 lws_sul_schedule(context.lws_ctx, 0, &client->connect_sul, dc_gateway_connect, 5000 * LWS_US_PER_MS);
@@ -273,6 +256,14 @@ void handle_invalid_session(discord_client *client, json_object *data)
 
 static void send_heartbeat(discord_client *client)
 {
+    if (!client->heartbeat_acked) {
+        lwsl_warn("%s#%s: Server didn't respond to heartbeat", client->user.username, client->user.discriminator);
+        lws_close_free_wsi(client->wsi, LWS_CLOSE_STATUS_NORMAL, "send_heartbeat");
+        return;
+    }
+
+    client->heartbeat_acked = false;
+
     json_object *root = json_object_new_object();
     json_object_object_add(root, "op", json_object_new_int(1));
     json_object_object_add(root, "d", client->last_seq_num == 0 ? json_object_new_null() : json_object_new_int(client->last_seq_num));
