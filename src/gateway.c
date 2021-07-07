@@ -192,7 +192,8 @@ static void handle_dispatch(discord_client *client, const char *type, json_objec
     if (!strcmp(type, "MESSAGE_CREATE")) {
         dc_message message = {
                 .contents = json_object_get_string(json_object_object_get(data, "content")),
-                .timestamp = (json_object_get_uint64(json_object_object_get(data, "id")) >> 22) + 1420070400000
+                .timestamp = (json_object_get_uint64(json_object_object_get(data, "id")) >> 22) + 1420070400000,
+                .edit = false
         };
         if (client->event_handler)
             client->event_handler(client, &message, dc_event_message);
@@ -200,7 +201,8 @@ static void handle_dispatch(discord_client *client, const char *type, json_objec
     else if (!strcmp(type, "MESSAGE_UPDATE")) {
         dc_message message = {
                 .contents = json_object_get_string(json_object_object_get(data, "content")),
-                .timestamp = (json_object_get_uint64(json_object_object_get(data, "id")) >> 22) + 1420070400000
+                .timestamp = (json_object_get_uint64(json_object_object_get(data, "id")) >> 22) + 1420070400000,
+                .edit = true
         };
         if (client->event_handler)
             client->event_handler(client, &message, dc_event_message);

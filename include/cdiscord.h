@@ -54,6 +54,7 @@ typedef struct dc_user_s {
 typedef struct dc_message_s {
     const char *contents;
     u_int64_t timestamp;
+    bool edit;
 } dc_message;
 
 
